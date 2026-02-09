@@ -8,5 +8,18 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
-  "exclude": ["node_modules", "dist", "public"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "public",
+
+    // ⭐ These prevent Cloudflare from type-checking server-only code
+    "index.ts",
+    "server.ts",
+    "server",
+    "src/server",
+    "src/server/**/*",
+    "**/server/**/*",
+    "**/*.server.ts"
+  ]
 }
