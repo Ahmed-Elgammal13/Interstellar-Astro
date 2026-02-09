@@ -13,13 +13,20 @@
     "dist",
     "public",
 
-    // ⭐ These prevent Cloudflare from type-checking server-only code
+    // ⭐ Prevent Astro from type-checking server-only files
     "index.ts",
     "server.ts",
     "server",
     "src/server",
     "src/server/**/*",
     "**/server/**/*",
-    "**/*.server.ts"
+    "**/*.server.ts",
+
+    // ⭐ Interstellar-Astro specific: exclude any leftover SSR utilities
+    "middleware.ts",
+    "src/middleware.ts",
+    "functions",
+    "api",
+    "routes/api"
   ]
 }
