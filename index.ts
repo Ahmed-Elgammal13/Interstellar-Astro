@@ -314,7 +314,6 @@ self.addEventListener("fetch", (event) => {
     done();
   });
 
-  const { handler } = (await import("./dist/server/entry.mjs")) as {
     handler: (req: unknown, res: unknown, next?: () => void) => void;
   };
   await app
