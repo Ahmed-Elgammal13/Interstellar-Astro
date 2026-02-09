@@ -1,6 +1,5 @@
 import { execFileSync } from "node:child_process";
 import path from "node:path";
-import node from "@astrojs/node";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
@@ -22,20 +21,24 @@ if (INConfig.server?.compress !== false) {
       JavaScript: true,
       SVG: true,
       Logger: 0,
-    }),
+    })
   );
 }
 
 export default defineConfig({
-  output: "server",
-  adapter: node({
-    mode: "middleware",
-  }),
+  // ⭐ STATIC MODE — REQUIRED FOR CLOUDFLARE PAGES
+  output: "static",
+
+  // ❌ REMOVED NODE ADAPTER (SSR not allowed on Pages)
+  // adapter: node({ mode: "middleware" }),
+
   integrations,
+
   prefetch: {
     defaultStrategy: "viewport",
     prefetchAll: false,
   },
+
   image: {
     remotePatterns: [
       {
@@ -45,6 +48,7 @@ export default defineConfig({
       },
     ],
   },
+
   vite: {
     logLevel: "warn",
     define: {
@@ -58,7 +62,7 @@ export default defineConfig({
           } catch {
             return new Date().toISOString();
           }
-        })(),
+        })()
       ),
     },
     resolve: {
@@ -67,12 +71,18 @@ export default defineConfig({
       },
     },
     plugins: [
+      // ⭐ This stays — Vite dev server only, ignored in static build
       {
         name: "vite-wisp-server",
         configureServer(server) {
-          server.httpServer?.on("upgrade", (req, socket, head) => (req.url?.startsWith("/f") ? wisp.routeRequest(req, socket, head) : undefined));
+          server.httpServer?.on("upgrade", (req, socket, head) =>
+            req.url?.startsWith("/f")
+              ? wisp.routeRequest(req, socket, head)
+              : undefined
+          );
         },
       },
+
       viteStaticCopy({
         targets: [
           {
